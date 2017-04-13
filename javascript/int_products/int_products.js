@@ -4,7 +4,7 @@ let productOfInts = function(array){
   return array.map(function(num, index){
     clone = JSON.parse(JSON.stringify(array));
     clone.splice(index, 1);
-    return clone.reduce(function(sum, n){return sum * n});
+    return eval(clone.join(" * "));
   });
 };
 
