@@ -1,19 +1,11 @@
 let productOfInts = function(array){
   let clone;
-  let result = [];
 
-  for (let i = 0; i < array.length; i++) {
+  return array.map(function(num, index){
     clone = JSON.parse(JSON.stringify(array));
-    clone.splice(i, 1);
-
-    result.push(
-      clone.reduce(function(sum, n){
-        return sum * n;
-      })
-    );
-  };
-
-  return result;
+    clone.splice(index, 1);
+    return clone.reduce(function(sum, n){return sum * n});
+  });
 };
 
 console.log(productOfInts([1, 7, 3, 4]).join('') === [84, 12, 28, 21].join(''))
