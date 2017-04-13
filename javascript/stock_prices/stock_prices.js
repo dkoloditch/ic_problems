@@ -1,5 +1,5 @@
 var getMaxProfit = function(priceList) {
-    if (stockPricesYesterday.length < 2) {
+    if (priceList.length < 2) {
         throw new Error('Getting a profit requires at least 2 prices');
     }
 
@@ -13,16 +13,28 @@ var getMaxProfit = function(priceList) {
 
 	  let min;
     let max;
+    let biggestDifference;
 
     priceList.forEach(function(p){
-        // update max and min as we move through the array
-        if (!min || p < min) {min = p}
-        if (!max || p > max) {max = p}
+        // move through array, setting min/max as needed and calculating the
+        // biggest difference as each new max value is found that's larger than
+        // the last.
+        if (!min || p < min) {
+          min = p;
+          max = null;
+        }
+        if (!max || p > max) {
+          if (!biggestDifference || p - min > biggestDifference) {
+            max = p;
+            biggestDifference = max - min;
+          }
+        }
     });
 
-    return max - min;
+    return biggestDifference;
 }
 
 console.log(getMaxProfit([1,3,2]) === 2)
 console.log(getMaxProfit([10, 7, 5, 8, 11, 9]) === 6)
 console.log(getMaxProfit([11, 10, 9, 8, 7, 5]) === -2)
+console.log(getMaxProfit([11, 8, 9, 10, 7, 5]) === 2)
