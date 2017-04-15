@@ -4,48 +4,22 @@
 // feature to see the times in a day when everyone is available.
 
 const mergeRanges = (meetings) => {
-  const meetingsLength = meetings.length;
-
-  if (meetingsLength < 2) {return meetings;}
-
-  let results = [];
-  let previous = meetings[0];
-  let current = meetings[1];
-  let currentBlock = previous;
-  let uniqueBlock;
-
   meetings.sort(function(a,b){return a.startTime - b.startTime});
 
-  for (let i = 1; i < meetingsLength; i++) {
-    current = meetings[i];
+  let results = [meetings[0]];
 
-    if (current.startTime > previous.endTime) {
-      // current meeting time later than previous
-      results.push(currentBlock);
-      currentBlock = {startTime: current.startTime, endTime: current.endTime};
-    }
-    else if (current.startTime < previous.startTime) {
-      // update earlier startTime for currentBlock
-      currentBlock.startTime = current.startTime;
-    }
-    else if (current.endTime > previous.endTime) {
-      // update later endTime for currentBlock
-      currentBlock.endTime = current.endTime;
-    }
+  for (let i = 1; i < meetings.length; i++) {
+    var current = meetings[i];
+    var lastAddedMeeting = results[results.length-1];
 
-    if (i === meetingsLength - 1) {
-      // if there no results or there's something worth adding
-      uniqueBlock = results.length > 0 && currentBlock.startTime > results[results.length-1].endTime;
-      if (results.length === 0 || uniqueBlock) {
-        results.push(currentBlock);
-      }
-
+    if (current.startTime <= lastAddedMeeting.endTime) {
+      lastAddedMeeting.endTime = Math.max(current.endTime, lastAddedMeeting.endTime);
     }
-
-    previous = current;
+    else {
+      results.push(current);
+    }
   };
 
-  // console.log(JSON.stringify(results));
   return results;
 }
 
@@ -107,6 +81,21 @@ console.log(
       {startTime: 2, endTime: 6},
       {startTime: 3, endTime: 5},
       {startTime: 7, endTime: 9},
+    ]
+  ))
+  ===
+  JSON.stringify(
+    [
+      {startTime: 1, endTime: 10}
+    ]
+  )
+);
+
+// test 5
+console.log(
+  JSON.stringify(mergeRanges(
+    [
+      {startTime: 1, endTime: 10}
     ]
   ))
   ===
