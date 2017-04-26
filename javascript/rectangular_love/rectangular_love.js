@@ -9,13 +9,13 @@ const findMatch = (recA, recB) => {
   // zero height
   if (lowerRec.height === 0 || upperRec.height === 0) return {};
   // lowerRec too far above upperRec
-  if (lowerRec.bottomY > (upperRec.bottomY + upperRec.height)) return {};
+  if (lowerRec.bottomY >= (upperRec.bottomY + upperRec.height)) return {};
   // lowerRec too far below upperRec
-  if ((lowerRec.bottomY + lowerRec.height) < upperRec.bottomY ) return {};
+  if ((lowerRec.bottomY + lowerRec.height) <= upperRec.bottomY ) return {};
   // lowerRec too far right of upperRec
-  if (lowerRec.leftX > (upperRec.leftX + upperRec.width)) return {};
+  if (lowerRec.leftX >= (upperRec.leftX + upperRec.width)) return {};
   // lowerRec too far left of upperRec
-  if ((lowerRec.leftX + lowerRec.width) < upperRec.leftX) return {};
+  if ((lowerRec.leftX + lowerRec.width) <= upperRec.leftX) return {};
 
   if (JSON.stringify(lowerRec) === JSON.stringify(upperRec)) {
     return {
@@ -129,6 +129,56 @@ console.log(
       },
       {
         leftX:3,
+        bottomY:1,
+        width:1,
+        height:1
+      }
+    )
+  )
+  ===
+  JSON.stringify(
+    {}
+  )
+);
+
+console.log("")
+console.log("no match - shared Y border only")
+console.log(
+  JSON.stringify(
+    findMatch(
+      {
+        leftX:1,
+        bottomY:1,
+        width:1,
+        height:1
+      },
+      {
+        leftX:1,
+        bottomY:2,
+        width:1,
+        height:1
+      }
+    )
+  )
+  ===
+  JSON.stringify(
+    {}
+  )
+);
+
+console.log("")
+console.log("no match - shared X border only")
+console.log(
+  JSON.stringify(
+    findMatch(
+      {
+        leftX:1,
+        bottomY:1,
+        width:1,
+        height:1
+      },
+      {
+        leftX:2,
         bottomY:1,
         width:1,
         height:1
